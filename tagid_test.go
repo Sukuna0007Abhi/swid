@@ -7,6 +7,7 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -235,4 +236,53 @@ func TestTagID_UnmarshalCBOR_empty_bytes(t *testing.T) {
 	err := actual.UnmarshalCBOR(tv)
 
 	assert.EqualError(t, err, expectedErr)
+}
+
+func TestTagID_Valid_nil_value(t *testing.T) {
+	tagID := TagID{val: nil}
+
+	err := tagID.Valid()
+
+	assert.EqualError(t, err, "tag-id value is nil")
+}
+
+func TestTagID_Valid_empty_string(t *testing.T) {
+	tagID := TagID{val: ""}
+
+	err := tagID.Valid()
+
+	assert.EqualError(t, err, "tag-id string value is empty")
+}
+
+func TestTagID_Valid_valid_string(t *testing.T) {
+	tagID := TagID{val: "com.acme.rrd-2013"}
+
+	err := tagID.Valid()
+
+	assert.NoError(t, err)
+}
+
+func TestTagID_Valid_nil_uuid(t *testing.T) {
+	tagID := TagID{val: uuid.Nil}
+
+	err := tagID.Valid()
+
+	assert.EqualError(t, err, "tag-id UUID value is nil UUID")
+}
+
+func TestTagID_Valid_valid_uuid(t *testing.T) {
+	validUUID := uuid.MustParse("00010001-0001-0001-0001-000100010001")
+	tagID := TagID{val: validUUID}
+
+	err := tagID.Valid()
+
+	assert.NoError(t, err)
+}
+
+func TestTagID_Valid_invalid_type(t *testing.T) {
+	tagID := TagID{val: 123}
+
+	err := tagID.Valid()
+
+	assert.EqualError(t, err, "tag-id value must be string or uuid.UUID, got int")
 }

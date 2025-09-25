@@ -47,3 +47,171 @@ func TestEvidence_Roundtrip(t *testing.T) {
 	assert.Equal(t, tv.Date.UTC(), actual.Date.UTC()) // compare as UTC
 	assert.Equal(t, tv.DeviceID, actual.DeviceID)
 }
+
+func TestEvidence_Valid_empty_device_id(t *testing.T) {
+	evidence := Evidence{
+		DeviceID: "",
+		Date:     time.Now(),
+	}
+
+	err := evidence.Valid()
+
+	assert.EqualError(t, err, "evidence device-id is empty")
+}
+
+func TestEvidence_Valid_zero_date(t *testing.T) {
+	evidence := Evidence{
+		DeviceID: "test-device",
+		Date:     time.Time{},
+	}
+
+	err := evidence.Valid()
+
+	assert.EqualError(t, err, "evidence date is zero")
+}
+
+func TestEvidence_Valid_simple_valid(t *testing.T) {
+	evidence := Evidence{
+		DeviceID: "test-device",
+		Date:     time.Now(),
+	}
+
+	err := evidence.Valid()
+
+	assert.NoError(t, err)
+}
+
+func TestEvidence_Valid_with_valid_files(t *testing.T) {
+	files := Files{
+		File{
+			FileSystemItem: FileSystemItem{
+				FsName: "test.exe",
+			},
+		},
+		File{
+			FileSystemItem: FileSystemItem{
+				FsName: "config.ini",
+			},
+		},
+	}
+
+	evidence := Evidence{
+		DeviceID: "test-device",
+		Date:     time.Now(),
+		ResourceCollection: ResourceCollection{
+			PathElements: PathElements{
+				Files: &files,
+			},
+		},
+	}
+
+	err := evidence.Valid()
+
+	assert.NoError(t, err)
+}
+
+func TestEvidence_Valid_with_invalid_files(t *testing.T) {
+	files := Files{
+		File{
+			FileSystemItem: FileSystemItem{
+				FsName: "test.exe",
+			},
+		},
+		File{
+			FileSystemItem: FileSystemItem{
+				FsName: "", // empty fs-name
+			},
+		},
+	}
+
+	evidence := Evidence{
+		DeviceID: "test-device",
+		Date:     time.Now(),
+		ResourceCollection: ResourceCollection{
+			PathElements: PathElements{
+				Files: &files,
+			},
+		},
+	}
+
+	err := evidence.Valid()
+
+	assert.EqualError(t, err, "evidence file[1] fs-name is empty")
+}
+
+func TestEvidence_Valid_with_valid_processes(t *testing.T) {
+	processes := Processes{
+		Process{
+			ProcessName: "test.exe",
+		},
+		Process{
+			ProcessName: "service.exe",
+		},
+	}
+
+	evidence := Evidence{
+		DeviceID: "test-device",
+		Date:     time.Now(),
+		ResourceCollection: ResourceCollection{
+			Processes: &processes,
+		},
+	}
+
+	err := evidence.Valid()
+
+	assert.NoError(t, err)
+}
+
+func TestEvidence_Valid_with_invalid_processes(t *testing.T) {
+	processes := Processes{
+		Process{
+			ProcessName: "test.exe",
+		},
+		Process{
+			ProcessName: "", // empty process name
+		},
+	}
+
+	evidence := Evidence{
+		DeviceID: "test-device",
+		Date:     time.Now(),
+		ResourceCollection: ResourceCollection{
+			Processes: &processes,
+		},
+	}
+
+	err := evidence.Valid()
+
+	assert.EqualError(t, err, "evidence process[1] process-name is empty")
+}
+
+func TestEvidence_Valid_with_mixed_valid_resources(t *testing.T) {
+	files := Files{
+		File{
+			FileSystemItem: FileSystemItem{
+				FsName: "test.exe",
+			},
+		},
+	}
+
+	processes := Processes{
+		Process{
+			ProcessName: "service.exe",
+		},
+	}
+
+	evidence := Evidence{
+		DeviceID: "test-device",
+		Date:     time.Now(),
+		ResourceCollection: ResourceCollection{
+			PathElements: PathElements{
+				Files: &files,
+			},
+			Processes: &processes,
+		},
+	}
+
+	err := evidence.Valid()
+
+	assert.NoError(t, err)
+}

@@ -102,6 +102,28 @@ func (t TagID) URI() string {
 	}
 }
 
+// Valid validates the TagID receiver to ensure it has a valid value
+func (t TagID) Valid() error {
+	if t.val == nil {
+		return errors.New("tag-id value is nil")
+	}
+
+	switch v := t.val.(type) {
+	case string:
+		if v == "" {
+			return errors.New("tag-id string value is empty")
+		}
+	case uuid.UUID:
+		if v == uuid.Nil {
+			return errors.New("tag-id UUID value is nil UUID")
+		}
+	default:
+		return fmt.Errorf("tag-id value must be string or uuid.UUID, got %T", v)
+	}
+
+	return nil
+}
+
 // MarshalXMLAttr encodes the TagID receiver as XML attribute
 func (t TagID) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return xml.Attr{Name: name, Value: t.String()}, nil

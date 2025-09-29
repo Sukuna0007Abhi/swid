@@ -71,8 +71,8 @@ func (e Evidence) Valid() error {
 	// Validate Files if present
 	if e.Files != nil {
 		for i, file := range *e.Files {
-			if file.FileSystemItem.FsName == "" {
-				return fmt.Errorf("evidence file[%d] fs-name is empty", i)
+			if err := file.Valid(); err != nil {
+				return fmt.Errorf("evidence file[%d] invalid: %w", i, err)
 			}
 		}
 	}

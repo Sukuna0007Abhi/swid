@@ -136,7 +136,7 @@ func TestEvidence_Valid_with_invalid_files(t *testing.T) {
 
 	err := evidence.Valid()
 
-	assert.EqualError(t, err, "evidence file[1] fs-name is empty")
+	assert.EqualError(t, err, "evidence file[1] invalid: file fs-name is empty")
 }
 
 func TestEvidence_Valid_with_valid_processes(t *testing.T) {

@@ -89,7 +89,7 @@ func (t TagID) String() string {
 	}
 }
 
-// Returns TagID in URI representation according to CoSWID Spec
+// URI returns TagID in URI representation according to CoSWID Spec
 // useful for URI fields like link->href
 func (t TagID) URI() string {
 	switch v := t.val.(type) {
@@ -116,6 +116,10 @@ func (t TagID) Valid() error {
 	case uuid.UUID:
 		if v == uuid.Nil {
 			return errors.New("tag-id UUID value is nil UUID")
+		}
+		// Check UUID variant as per RFC4122 (similar to corim implementation)
+		if variant := v.Variant(); variant != uuid.RFC4122 {
+			return fmt.Errorf("tag-id UUID expecting RFC4122 variant, got %s instead", variant)
 		}
 	default:
 		return fmt.Errorf("tag-id value must be string or uuid.UUID, got %T", v)

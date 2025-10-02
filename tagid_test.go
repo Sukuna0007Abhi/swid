@@ -271,12 +271,23 @@ func TestTagID_Valid_nil_uuid(t *testing.T) {
 }
 
 func TestTagID_Valid_valid_uuid(t *testing.T) {
-	validUUID := uuid.MustParse("00010001-0001-0001-0001-000100010001")
+	// Use a proper RFC4122 UUID (version 4)
+	validUUID := uuid.MustParse("550e8400-e29b-41d4-a716-446655440000")
 	tagID := TagID{val: validUUID}
 
 	err := tagID.Valid()
 
 	assert.NoError(t, err)
+}
+
+func TestTagID_Valid_invalid_uuid_variant(t *testing.T) {
+	// Create a UUID with an invalid variant (non-RFC4122)
+	invalidVariantUUID := uuid.UUID{0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01}
+	tagID := TagID{val: invalidVariantUUID}
+
+	err := tagID.Valid()
+
+	assert.Contains(t, err.Error(), "tag-id UUID expecting RFC4122 variant")
 }
 
 func TestTagID_Valid_invalid_type(t *testing.T) {

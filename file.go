@@ -29,7 +29,7 @@ type File struct {
 // Valid validates the File receiver to ensure it has valid required and optional fields
 func (f File) Valid() error {
 	// Check mandatory fields
-	if f.FileSystemItem.FsName == "" {
+	if f.FsName == "" {
 		return errors.New("file fs-name is empty")
 	}
 

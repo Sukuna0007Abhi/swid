@@ -117,7 +117,7 @@ func (t TagID) Valid() error {
 		if v == uuid.Nil {
 			return errors.New("tag-id UUID value is nil UUID")
 		}
-		// Check UUID variant as per RFC4122 (similar to corim implementation)
+		// Check UUID variant as per RFC4122
 		if variant := v.Variant(); variant != uuid.RFC4122 {
 			return fmt.Errorf("tag-id UUID expecting RFC4122 variant, got %s instead", variant)
 		}

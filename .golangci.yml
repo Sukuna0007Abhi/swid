@@ -1,4 +1,3 @@
-version: 2
 # Do not delete linter settings. Linters like gocritic can be enabled on the command line.
 
 run:

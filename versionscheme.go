@@ -100,6 +100,7 @@ func (vs *VersionScheme) UnmarshalXMLAttr(attr xml.Attr) error {
 	return xmlAttrToCode(attr, stringToVersionScheme, &vs.val)
 }
 
+// SetCode sets the version scheme code if it is a known value
 func (vs *VersionScheme) SetCode(v int64) error {
 	if _, ok := versionSchemeToString[v]; ok {
 		vs.val = v

@@ -12,10 +12,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestTagID_NewFromUUIDString(t *testing.T) {
-	tv := "00010001-0001-0001-0001-000100010001"
+const (
+	testUUIDString  = "00010001-0001-0001-0001-000100010001"
+	testTagIDString = "example.acme.roadrunner-sw-v1-0-0"
+)
 
-	expected := "00010001-0001-0001-0001-000100010001"
+func TestTagID_NewFromUUIDString(t *testing.T) {
+	tv := testUUIDString
+
+	expected := testUUIDString
 
 	actual := NewTagID(tv)
 
@@ -37,7 +42,7 @@ func TestTagID_16Bytes(t *testing.T) {
 		0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01,
 	}
 
-	expected := "00010001-0001-0001-0001-000100010001"
+	expected := testUUIDString
 
 	actual := NewTagID(tv)
 
@@ -69,7 +74,7 @@ func TestTagID_17Bytes(t *testing.T) {
 }
 
 func TestTagID_String(t *testing.T) {
-	tv := "example.acme.roadrunner-sw-v1-0-0"
+	tv := testTagIDString
 
 	actual := NewTagID(tv)
 
@@ -109,7 +114,7 @@ func TestTagID_UnmarshalXMLAttrString_empty(t *testing.T) {
 }
 
 func TestTagID_UnmarshalXMLAttrString(t *testing.T) {
-	v := "example.acme.roadrunner-sw-v1-0-0"
+	v := testTagIDString
 
 	tv := xml.Attr{
 		Name:  xml.Name{Local: "tagId"},
@@ -128,7 +133,7 @@ func TestTagID_UnmarshalXMLAttrString(t *testing.T) {
 }
 
 func TestTagID_MarshalXMLAttrString(t *testing.T) {
-	v := "example.acme.roadrunner-sw-v1-0-0"
+	v := testTagIDString
 
 	tv := NewTagID(v)
 	require.NotNil(t, tv)
@@ -153,7 +158,7 @@ func TestTagID_MarshalXMLAttrBytes(t *testing.T) {
 	tv := NewTagID(v)
 	require.NotNil(t, tv)
 
-	expected := "00010001-0001-0001-0001-000100010001"
+	expected := testUUIDString
 
 	actual, err := tv.MarshalXMLAttr(xml.Name{Local: "tagId"})
 
@@ -170,7 +175,7 @@ func TestTagID_MarshalJSONBytes(t *testing.T) {
 	tv := NewTagID(v)
 	require.NotNil(t, tv)
 
-	expected := `"00010001-0001-0001-0001-000100010001"`
+	expected := `"` + testUUIDString + `"`
 
 	actual, err := tv.MarshalJSON()
 

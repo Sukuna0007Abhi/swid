@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// MustHexDecode decodes a hex string or panics on error
 func MustHexDecode(t *testing.T, s string) []byte {
 	data, err := hex.DecodeString(s)
 	if t != nil {

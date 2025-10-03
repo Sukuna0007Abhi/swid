@@ -377,7 +377,7 @@ func TestHashEntry_Set_mismatched_input(t *testing.T) {
 }
 
 func TestHashEntry_ValidHashEntry_unknown_algo(t *testing.T) {
-	var unknownAlgID uint64 = 0
+	var unknownAlgID uint64
 	err := ValidHashEntry(unknownAlgID, []byte{})
 	assert.EqualError(t, err, "unknown hash algorithm 0")
 }

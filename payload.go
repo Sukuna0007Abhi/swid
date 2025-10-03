@@ -27,6 +27,7 @@ func (p *Payload) AddDirectory(d Directory) error {
 	return nil
 }
 
+// AddFile adds a File to the Payload
 func (p *Payload) AddFile(f File) error {
 	if p.Files == nil {
 		p.Files = new(Files)

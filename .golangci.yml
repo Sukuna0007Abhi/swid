@@ -1,5 +1,7 @@
 # Do not delete linter settings. Linters like gocritic can be enabled on the command line.
 
+version: 2
+
 linters-settings:
   dupl:
     threshold: 100
@@ -41,17 +43,19 @@ linters:
     - errcheck
     - goconst
     - gocyclo
-    - gofmt
-    - goimports
     - revive
     - gosec
     - govet
     - ineffassign
     - misspell
     - staticcheck
-    - typecheck
     - unconvert
     - unused
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
 
 
 issues:

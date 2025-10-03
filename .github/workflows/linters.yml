@@ -20,4 +20,4 @@ jobs:
     - name: Run required linters in .golangci.yml plus hard-coded ones here
       run: $(go env GOPATH)/bin/golangci-lint run --timeout=3m
     - name: Run optional linters (not required to pass)
-      run: $(go env GOPATH)/bin/golangci-lint run --timeout=3m --issues-exit-code=0 -E dupl -E gocritic -E gosimple -E lll -E prealloc
+      run: $(go env GOPATH)/bin/golangci-lint run --timeout=3m --issues-exit-code=0 -E dupl -E gocritic -E lll -E prealloc

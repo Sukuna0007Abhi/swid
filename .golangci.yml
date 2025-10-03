@@ -1,5 +1,8 @@
 # Do not delete linter settings. Linters like gocritic can be enabled on the command line.
 
+run:
+  timeout: 3m
+
 version: 2
 
 linters-settings:
